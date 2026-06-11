@@ -1,0 +1,22 @@
+title: Fireflare Docs
+description: Cloudflare-native scraping, search, mapping, and crawl API.
+remote_theme: just-the-docs/just-the-docs
+
+url: https://oladapodev.github.io
+baseurl: /fireflare
+
+aux_links:
+  API schema: https://fireflare-api.oladapo.workers.dev/openapi.json
+
+nav_external_links:
+  - title: API schema
+    url: https://fireflare-api.oladapo.workers.dev/openapi.json
+  - title: Worker root
+    url: https://fireflare-api.oladapo.workers.dev
+
+plugins:
+  - jekyll-remote-theme
+
+color_scheme: light
+search_enabled: true
+heading_anchors: true

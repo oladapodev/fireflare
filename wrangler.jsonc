@@ -1,0 +1,73 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "fireflare-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "limits": {
+    "cpu_ms": 300000,
+    "subrequests": 1000
+  },
+  "vars": {
+    "ENVIRONMENT": "development",
+    "BROWSER_PROVIDER": "cloudflare",
+    "SEARCH_PROVIDER": "auto",
+    "KERNEL_API_BASE": "https://api.onkernel.com",
+    "BROWSER_SEARCH_URL": "https://search.brave.com/search?q=",
+    "DOCS_SITE": "https://oladapodev.github.io/fireflare"
+  },
+  "browser": {
+    "binding": "BROWSER",
+    "remote": true
+  },
+  "r2_buckets": [
+    {
+      "binding": "ARTIFACTS",
+      "bucket_name": "fireflare-artifacts"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fireflare",
+      "database_id": "5c6ca868-6c29-4201-b543-60495803e85e",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "CRAWL_QUEUE",
+        "queue": "fireflare-crawl"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "fireflare-crawl",
+        "max_batch_size": 5,
+        "max_batch_timeout": 10,
+        "max_retries": 3,
+        "dead_letter_queue": "fireflare-crawl-dlq",
+        "max_concurrency": 5
+      }
+    ]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "JOB_STATUS",
+        "class_name": "JobStatusObject"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["JobStatusObject"]
+    }
+  ]
+}

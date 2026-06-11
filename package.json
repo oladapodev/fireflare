@@ -1,0 +1,27 @@
+{
+  "name": "@fireflare/cloudflare-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "chanfana": "^3.3.0",
+    "hono": "^4.12.25",
+    "zod": "^4.4.3"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "dev:remote-preview": "wrangler dev --remote",
+    "bench:live": "bash scripts/benchmark.sh",
+    "deploy": "wrangler deploy --x-autoconfig=false",
+    "types": "wrangler types src/worker-configuration.d.ts",
+    "db:migrate:local": "wrangler d1 migrations apply fireflare --local",
+    "db:migrate:remote": "wrangler d1 migrations apply fireflare --remote",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest",
+    "wrangler": "latest"
+  }
+}
