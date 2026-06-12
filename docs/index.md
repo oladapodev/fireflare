@@ -38,7 +38,7 @@ Fireflare runs as `fireflare-api` on Cloudflare Workers with Browser Rendering, 
 - Examples for ready-to-run payloads and curl snippets.
 - Auth and Errors for behavior notes while auth/rate limits remain planned.
 
-<details>
+<details markdown="1">
   <summary>Current public deployment</summary>
 
 - API root: <https://fireflare-api.oladapo.workers.dev>

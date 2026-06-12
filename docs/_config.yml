@@ -18,7 +18,7 @@ nav_external_links:
 plugins:
   - jekyll-remote-theme
 
-color_scheme: light
+color_scheme: dark
 nav_sort: case_sensitive
 search_enabled: true
 heading_anchors: true

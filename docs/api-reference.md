@@ -36,7 +36,7 @@ Use this page to read API paths and examples by group.
 
 ## API surfaces (folded)
 
-<details>
+<details markdown="1">
   <summary><strong>Scrape</strong> — fetch and normalize page content</summary>
 
 ### `POST /v1/scrape` and `POST /v2/scrape`
@@ -81,7 +81,7 @@ curl https://fireflare-api.oladapo.workers.dev/v2/scrape/job-123e4567-e89b-12d3-
 ```
 </details>
 
-<details>
+<details markdown="1">
   <summary><strong>Extract</strong> — parse and structure extracted content</summary>
 
 ### `POST /v1/extract` and `POST /v2/extract`
@@ -119,8 +119,8 @@ curl https://fireflare-api.oladapo.workers.dev/v2/extract/extract-uuid
 ```
 </details>
 
-<details>
-  <summary><strong>Search</strong> — query web providers and collect ranked results</strong></summary>
+<details markdown="1">
+  <summary><strong>Search</strong> — query web providers and collect ranked results</summary>
 
 ### `POST /v1/search` and `POST /v2/search`
 
@@ -163,7 +163,7 @@ curl -X POST \
 ```
 </details>
 
-<details>
+<details markdown="1">
   <summary><strong>Map</strong> — crawl link graph within a domain scope</summary>
 
 ### `POST /v1/map` and `POST /v2/map`
@@ -192,7 +192,7 @@ POST /v2/map
 ```
 </details>
 
-<details>
+<details markdown="1">
   <summary><strong>Crawl</strong> — async breadth job execution and status APIs</summary>
 
 ### `POST /v1/crawl` and `POST /v2/crawl`
@@ -261,7 +261,7 @@ curl https://fireflare-api.oladapo.workers.dev/v2/crawl/active
 ```
 </details>
 
-<details>
+<details markdown="1">
   <summary><strong>Batch scrape</strong> — queue multi-URL scrape jobs</summary>
 
 ### `POST /v1/batch/scrape` and `POST /v2/batch/scrape`

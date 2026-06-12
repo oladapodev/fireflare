@@ -30,7 +30,7 @@ Current error responses use JSON with:
 | `500` | Unexpected runtime failure |
 | `503` | Provider or dependency temporary failure |
 
-<details>
+<details markdown="1">
   <summary>Error sample: invalid URL</summary>
 
 ```json
@@ -43,7 +43,7 @@ Current error responses use JSON with:
 ```
 </details>
 
-<details>
+<details markdown="1">
   <summary>Error sample: missing job</summary>
 
 ```json
