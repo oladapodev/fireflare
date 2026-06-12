@@ -4,7 +4,11 @@ title: Examples
 nav_order: 4
 ---
 
+<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
+
 # Examples
+
+Each snippet uses the public Worker endpoint.
 
 ## Scrape
 
@@ -12,9 +16,13 @@ nav_order: 4
 curl -X POST https://fireflare-api.oladapo.workers.dev/v2/scrape \
   -H "Content-Type: application/json" \
   -d '{
-    "url": "https://example.com",
-    "formats": ["markdown"]
+  "url": "https://example.com",
+  "formats": ["markdown"]
   }'
+```
+
+```bash
+curl https://fireflare-api.oladapo.workers.dev/v2/scrape/af12...
 ```
 
 ## Search
@@ -40,7 +48,7 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/map \
   }'
 ```
 
-## Async Crawl
+## Async Crawl status loop
 
 ```bash
 curl -X POST https://fireflare-api.oladapo.workers.dev/v2/crawl \
@@ -51,4 +59,41 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/crawl \
     "maxDepth": 1,
     "async": true
   }'
+```
+
+```bash
+curl https://fireflare-api.oladapo.workers.dev/v2/crawl/af12... | jq
+```
+
+## Batch scrape
+
+```bash
+curl -X POST https://fireflare-api.oladapo.workers.dev/v2/batch/scrape \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": [
+      "https://example.com",
+      "https://example.com/docs"
+    ],
+    "formats": ["markdown"],
+    "concurrency": 2
+  }'
+```
+
+```bash
+curl https://fireflare-api.oladapo.workers.dev/v2/batch/scrape/af12...
+```
+
+## Feedback
+
+```bash
+curl -X POST https://fireflare-api.oladapo.workers.dev/v2/search/search-job-id/feedback \
+  -H "Content-Type: application/json" \
+  -d '{"resultIndex": 0, "relevant": true}'
+```
+
+## OpenAPI pull
+
+```bash
+curl https://fireflare-api.oladapo.workers.dev/openapi.json | jq '.paths | keys | length'
 ```

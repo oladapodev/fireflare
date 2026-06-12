@@ -1,0 +1,248 @@
+/* Fireflare Docs visual system */
+:root {
+  --ff-bg: #f7ead7;
+  --ff-surface: #ffffff;
+  --ff-text: #050505;
+  --ff-border: #d4d4d8;
+  --ff-muted: #52525b;
+  --ff-primary: #f28c38;
+  --ff-primary-hover: #df7b2b;
+  --ff-error: #e63946;
+  --ff-card-shadow: 0 16px 36px rgba(8, 7, 4, 0.12);
+  --ff-code-bg: #1f1f1f;
+  --ff-code-text: #ececec;
+  --ff-code-keyword: #fbbf24;
+  --ff-code-string: #86efac;
+  --ff-code-number: #f9a8d4;
+  --ff-code-type: #93c5fd;
+  --ff-code-attr: #f97316;
+  --ff-code-builtin: #a5f3fc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ff-bg: #362f2b;
+    --ff-surface: #1f1f1f;
+    --ff-text: #ececec;
+    --ff-border: #27272a;
+    --ff-muted: #c7c7c7;
+    --ff-primary: #d9782f;
+    --ff-primary-hover: #c76b28;
+    --ff-error: #e63946;
+    --ff-card-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    --ff-code-bg: #0b0b0b;
+    --ff-code-text: #ececec;
+    --ff-code-keyword: #fdba74;
+    --ff-code-string: #86efac;
+    --ff-code-number: #f0abfc;
+    --ff-code-type: #7dd3fc;
+    --ff-code-attr: #fdba74;
+    --ff-code-builtin: #67e8f9;
+  }
+}
+
+@font-face {
+  font-family: "Fira Sans Fallback";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Trebuchet MS"), local("Segoe UI");
+}
+
+@font-face {
+  font-family: "Fira Mono Fallback";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Consolas"), local("Menlo"), local("Monaco"), local("Courier New");
+}
+
+body,
+.main-content {
+  background: var(--ff-bg) !important;
+  color: var(--ff-text) !important;
+  font-family: "Fira Sans Fallback", "Trebuchet MS", "Segoe UI", sans-serif !important;
+}
+
+.site-header,
+.side-bar,
+.side-bar .nav-list {
+  background: color-mix(in oklab, var(--ff-surface), var(--ff-bg) 16%) !important;
+  color: var(--ff-text) !important;
+}
+
+a {
+  color: var(--ff-primary) !important;
+}
+
+a:hover {
+  color: var(--ff-primary-hover) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: 0.01em;
+}
+
+main,
+.main-content section,
+.main-content .col-md-12,
+.content {
+  background: transparent !important;
+}
+
+.page-content {
+  background: transparent !important;
+}
+
+.page-content,
+.main-content,
+.highlighter-rouge,
+.highlight,
+pre.highlight,
+.highlight pre {
+  border: 1px solid var(--ff-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--ff-card-shadow);
+}
+
+pre,
+code {
+  font-family: "Fira Mono Fallback", "SFMono-Regular", "Consolas", monospace !important;
+}
+
+pre,
+.highlight {
+  background: var(--ff-code-bg) !important;
+  color: var(--ff-code-text) !important;
+}
+
+.highlight .k,
+.highlight .kr,
+.highlight .kd,
+.highlight .kn {
+  color: var(--ff-code-keyword) !important;
+  font-weight: 600;
+}
+
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .se,
+.highlight .sb,
+.highlight .sr {
+  color: var(--ff-code-string) !important;
+}
+
+.highlight .m,
+.highlight .mf,
+.highlight .mi,
+.highlight .mh,
+.highlight .mb,
+.highlight .il,
+.highlight .mo {
+  color: var(--ff-code-number) !important;
+}
+
+.highlight .nb,
+.highlight .nc,
+.highlight .nd,
+.highlight .nf {
+  color: var(--ff-code-type) !important;
+}
+
+.highlight .na,
+.highlight .no,
+.highlight .nx,
+.highlight .nt {
+  color: var(--ff-code-attr) !important;
+}
+
+.highlight .bp,
+.highlight .n {
+  color: var(--ff-code-builtin) !important;
+}
+
+.highlight .c,
+.highlight .c1,
+.highlight .cm {
+  color: #94a3b8 !important;
+  font-style: italic;
+}
+
+details {
+  margin: 1rem 0;
+  border: 1px solid var(--ff-border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  background: color-mix(in oklab, var(--ff-surface), var(--ff-bg) 35%) !important;
+}
+
+details > summary {
+  list-style: none;
+  cursor: pointer;
+  color: var(--ff-text);
+  font-weight: 700;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: var(--ff-primary);
+  transition: transform 0.2s ease;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+details[open] > summary {
+  color: var(--ff-primary);
+}
+
+hr {
+  border-top: 1px solid var(--ff-border);
+}
+
+table {
+  border: 1px solid var(--ff-border) !important;
+}
+
+table thead th {
+  background: color-mix(in oklab, var(--ff-primary), white 80%);
+  color: #111827;
+}
+
+.table-wrapper {
+  border: 0;
+}
+
+.btn,
+.button {
+  border-radius: 999px;
+  background: var(--ff-primary);
+  color: #111827 !important;
+}
+
+.btn:hover,
+.button:hover {
+  background: var(--ff-primary-hover);
+}
+
+@media (max-width: 768px) {
+  body,
+  .main-content {
+    padding: 1rem !important;
+  }
+
+  details {
+    padding: 0.6rem 0.75rem;
+  }
+}

@@ -4,6 +4,8 @@ title: Getting Started
 nav_order: 2
 ---
 
+<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
+
 # Getting Started
 
 Base URL:
@@ -25,18 +27,36 @@ curl https://fireflare-api.oladapo.workers.dev/openapi.json
 ```
 
 The Worker redirects `/docs` to this GitHub Pages site. It does not serve a custom HTML docs app.
+`/docs` is not a UI shell with hand-authored Swagger HTML.
+
+`/openapi.json` is generated from the Chanfana route classes at runtime.
 
 ## Local Development
 
 ```bash
-npm install
-npm run db:migrate:local
-npm run dev
+PATH=/home/dev/.bun/bin:$PATH bun install
+PATH=/home/dev/.bun/bin:$PATH bun run typecheck
+PATH=/home/dev/.bun/bin:$PATH bun run dev
 ```
+
+Use Worker KV/Queue/D1/R2 bindings from `wrangler.jsonc` before running local tests.
 
 ## Deploy
 
 ```bash
-npm run typecheck
-npm run deploy
+PATH=/home/dev/.bun/bin:$PATH bun run typecheck
+PATH=/home/dev/.bun/bin:$PATH bun run deploy
+```
+
+Expected deploy output:
+
+1. Worker URL printed.
+2. Route list includes `/openapi.json`.
+3. Docs redirect returns 302 from `/docs` to GitHub Pages.
+
+## Useful checks
+
+```bash
+curl -f https://fireflare-api.oladapo.workers.dev/openapi.json
+curl -I https://fireflare-api.oladapo.workers.dev/docs
 ```

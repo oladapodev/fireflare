@@ -43,6 +43,13 @@ This repository ships public documentation through GitHub Pages:
 - `README.md` — runtime and quickstart
 - `docus/` — legacy planning notes (ignored in git)
 - `docs/` — now used for maintainable public documentation
+- `docs/assets/css/fireflare-docs.css` — Cloudflare orange light/dark visual system
+
+## Docs notes
+
+- API docs now present full endpoint coverage using folded sections in [api-reference.md](/home/dev/Desktop/fireflare/docs/api-reference.md).
+- Code blocks share a tuned syntax palette for both light and dark mode.
+- `/docs` on the worker redirects to GitHub Pages.
 
 ## Runtime setup
 
@@ -59,7 +66,7 @@ See `.github` docs removed from this trimmed repo copy. Keep required env vars i
 Run:
 
 ```bash
-npm install
-npm run typecheck
-npm run deploy
+PATH=/home/dev/.bun/bin:$PATH bun install
+PATH=/home/dev/.bun/bin:$PATH bun run typecheck
+PATH=/home/dev/.bun/bin:$PATH bun run deploy
 ```
