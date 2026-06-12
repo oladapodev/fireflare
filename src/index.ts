@@ -1,6 +1,7 @@
 import { JobStatusObject } from "./durable/job-status";
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
+import { explorerHTML } from "./ui";
 import {
   consumeCrawlQueue,
 } from "./handlers/crawl";
@@ -52,35 +53,13 @@ const openapi = fromHono(app, {
   },
 });
 
-app.get("/", c =>
-  c.json({
-    name: "Fireflare API",
-    runtime: "cloudflare-workers",
-    browserProvider: c.env.BROWSER_PROVIDER,
-    searchProvider: c.env.SEARCH_PROVIDER,
-    docs: c.env.DOCS_SITE || "https://oladapodev.github.io/fireflare",
-    openapi: "/openapi.json",
-    endpoints: [
-      "/scrape",
-      "/scrape/:id",
-      "/extract",
-      "/extract/:id",
-      "/search",
-      "/search/:jobId/feedback",
-      "/map",
-      "/batch/scrape",
-      "/batch/scrape/:id",
-      "/batch/scrape/:id/errors",
-      "/batch/scrape/:id (DELETE)",
-      "/crawl",
-      "/crawl/:id",
-      "/crawl/:id/errors",
-      "/crawl/:id (DELETE)",
-      "/crawl/ongoing",
-      "/crawl/active",
-    ],
-  }),
-);
+app.get("/", c => {
+  const origin = new URL(c.req.raw.url).origin;
+  const docsUrl = c.env.DOCS_SITE || "https://oladapodev.github.io/fireflare";
+  return new Response(explorerHTML(origin, docsUrl), {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
+});
 
 app.get("/docs", redirectToDocs);
 app.get("/docs/*", redirectToDocs);

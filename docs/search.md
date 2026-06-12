@@ -9,7 +9,7 @@ nav_order: 3
 
 # Search
 
-Query web providers and collect ranked results.
+Query web providers and collect ranked results. Optionally scrape result pages into structured formats.
 
 ## `POST /search`
 
@@ -19,8 +19,7 @@ Runs web search against configured providers.
 POST /search
 {
   "query": "cloudflare workers web scraping",
-  "limit": 3,
-  "searchProvider": "brave"
+  "limit": 5
 }
 ```
 
@@ -41,6 +40,59 @@ POST /search
   },
   "creditsUsed": 2,
   "error": null
+}
+```
+
+## `scrapeOptions.formats` — scrape result pages
+
+Pass `scrapeOptions` to scrape each result page and return content in the specified format. Supported formats: `markdown`, `html`, `rawHtml`, `json`, `links`.
+
+```json
+POST /search
+{
+  "query": "cloudflare workers limits",
+  "limit": 3,
+  "scrapeOptions": {
+    "formats": ["markdown"]
+  }
+}
+```
+
+### JSON extraction from result pages
+
+Use `formats: ["json"]` with a `jsonPrompt` to extract structured data from each result page.
+
+```json
+POST /search
+{
+  "query": "typescript best practices 2024",
+  "limit": 3,
+  "scrapeOptions": {
+    "formats": ["json"],
+    "jsonPrompt": "Extract the article title, author, and a one-sentence summary."
+  }
+}
+```
+
+```json
+200
+{
+  "success": true,
+  "id": "search-uuid",
+  "status": "completed",
+  "data": {
+    "web": [
+      {
+        "title": "TypeScript Best Practices",
+        "url": "https://example.com/ts-best-practices",
+        "json": {
+          "title": "TypeScript Best Practices",
+          "author": "Jane Doe",
+          "summary": "A guide to writing clean TypeScript in 2024."
+        }
+      }
+    ]
+  }
 }
 ```
 
