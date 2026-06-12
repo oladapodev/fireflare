@@ -1,14 +1,13 @@
 /* Fireflare Docs — clean dark theme */
 
-/* Override Just the Docs dark scheme colors */
 .site-header {
   background-color: #13131a !important;
-  border-bottom: 1px solid #2a2a3a !important;
+  border-bottom: 1px solid #1e1e2c !important;
 }
 
 .side-bar {
   background-color: #13131a !important;
-  border-right: 1px solid #2a2a3a !important;
+  border-right: none !important;
 }
 
 .side-bar .nav-list .nav-list-item .nav-list-link {
@@ -37,8 +36,8 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
 }
 
-h1 { border-bottom: 1px solid #2a2a3a; padding-bottom: 0.5rem; }
-h2 { border-bottom: 1px solid #1e1e2c; padding-bottom: 0.3rem; }
+h1 { border-bottom: 1px solid #1e1e2c; padding-bottom: 0.5rem; }
+h2 { border-bottom: 1px solid #1a1a26; padding-bottom: 0.3rem; }
 
 p, li, td {
   color: #cbd5e1 !important;
@@ -55,27 +54,27 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Code — inline */
+/* Inline code — no border, just subtle background */
 code:not(pre code) {
   background: #1e1e2e !important;
   color: #a5b4fc !important;
-  border: 1px solid #2a2a4a !important;
+  border: none !important;
   border-radius: 4px;
   padding: 0.1em 0.35em;
   font-size: 0.875em;
   font-family: "SFMono-Regular", "Consolas", "Menlo", monospace !important;
 }
 
-/* Code blocks */
+/* Code blocks — no border, background contrast only */
 pre,
 .highlight,
 pre.highlight,
 .highlighter-rouge {
-  background: #13131f !important;
-  border: 1px solid #2a2a3a !important;
+  background: #16161f !important;
+  border: none !important;
   border-radius: 8px !important;
   box-shadow: none !important;
-  margin: 1rem 0;
+  margin: 0.75rem 0;
 }
 
 pre code,
@@ -88,7 +87,7 @@ pre code,
   padding: 0;
 }
 
-/* Syntax highlighting — Catppuccin-inspired */
+/* Syntax highlighting — Catppuccin Mocha */
 .highlight .k, .highlight .kr, .highlight .kd, .highlight .kn, .highlight .kp {
   color: #cba6f7 !important;
 }
@@ -128,10 +127,10 @@ pre code,
   color: #94a3b8 !important;
 }
 
-/* Details / folded sections */
+/* Details — background only, no border */
 details {
-  margin: 0.75rem 0;
-  border: 1px solid #2a2a3a;
+  margin: 0.5rem 0;
+  border: none;
   border-radius: 8px;
   background: #13131f !important;
   overflow: hidden;
@@ -144,7 +143,6 @@ details > summary {
   color: #e2e8f0;
   font-weight: 600;
   user-select: none;
-  border-radius: 8px;
 }
 
 details > summary::-webkit-details-marker {
@@ -167,8 +165,6 @@ details[open] > summary::before {
 
 details[open] > summary {
   color: #f97316;
-  border-bottom: 1px solid #2a2a3a;
-  border-radius: 8px 8px 0 0;
 }
 
 details > *:not(summary) {
@@ -176,27 +172,28 @@ details > *:not(summary) {
 }
 
 details > *:last-child {
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
 }
 
-/* Tables */
+/* Tables — minimal, just row separators */
 table {
-  border: 1px solid #2a2a3a !important;
-  border-radius: 8px;
-  overflow: hidden;
+  border: none !important;
   width: 100%;
 }
 
 table thead th {
-  background: #1a1a2e !important;
-  color: #f1f5f9 !important;
+  background: transparent !important;
+  color: #94a3b8 !important;
   border-bottom: 1px solid #2a2a3a !important;
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
 }
 
 table td, table th {
   border: none !important;
-  border-bottom: 1px solid #1e1e2c !important;
+  border-bottom: 1px solid #1a1a26 !important;
   color: #cbd5e1 !important;
 }
 
@@ -204,23 +201,17 @@ table tbody tr:last-child td {
   border-bottom: none !important;
 }
 
-table tbody tr:hover td {
-  background: rgba(249, 115, 22, 0.04) !important;
-}
-
 .table-wrapper {
   border: none !important;
   box-shadow: none !important;
 }
 
-/* Horizontal rule */
 hr {
   border: none;
-  border-top: 1px solid #2a2a3a;
+  border-top: 1px solid #1e1e2c;
   margin: 2rem 0;
 }
 
-/* Search box */
 .search-input {
   background: #1a1a2e !important;
   border: 1px solid #2a2a3a !important;
@@ -228,7 +219,6 @@ hr {
   border-radius: 6px;
 }
 
-/* Aux links (header) */
 .aux-nav-list .aux-nav-list-item a {
   color: #94a3b8 !important;
 }
@@ -237,13 +227,11 @@ hr {
   color: #f97316 !important;
 }
 
-/* Site title */
 .site-title {
   color: #f97316 !important;
   font-weight: 700;
 }
 
-/* Page content — no card/shadow, just clean */
 .page-content,
 .main-content section {
   background: transparent !important;
@@ -251,7 +239,6 @@ hr {
   box-shadow: none !important;
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .main-content {
     padding: 1rem !important;
