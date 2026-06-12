@@ -5,7 +5,7 @@ import { json, readJson } from "../utils/http";
 const MAX_MAP_LIMIT = 100000;
 const DEFAULT_MAP_LIMIT = 5000;
 
-export async function handleMap(request: Request, env: Env, path: string): Promise<Response> {
+export async function handleMap(request: Request, env: Env, _path: string): Promise<Response> {
   const body = await readJson<Partial<MapRequest>>(request);
   const validation = validateMapBody(body);
   if (!validation.ok) {
@@ -30,13 +30,10 @@ export async function handleMap(request: Request, env: Env, path: string): Promi
     includeSubdomains,
   );
 
-  const isV2 = path.startsWith("/v2/");
-  const linksPayload = isV2
-    ? links.map(link => ({
+  const linksPayload = links.map(link => ({
         url: link,
         title: link.replace(/^https?:\/\//, "").split("/")[0],
-      }))
-    : links;
+      }));
 
   return json({
     success: true,

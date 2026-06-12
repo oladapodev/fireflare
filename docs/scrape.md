@@ -11,12 +11,12 @@ nav_order: 1
 
 Fetch and normalize page content. Returns markdown, raw HTML, or structured text.
 
-## `POST /v1/scrape` and `POST /v2/scrape`
+## `POST /scrape`
 
 Captures webpage content and returns structured formats.
 
 ```json
-POST /v2/scrape
+POST /scrape
 {
   "url": "https://example.com",
   "formats": ["markdown", "html", "raw"]
@@ -35,12 +35,12 @@ POST /v2/scrape
 }
 ```
 
-## `GET /v1/scrape/{id}` and `GET /v2/scrape/{id}`
+## `GET /scrape/{id}`
 
 Returns scrape job result by id.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/scrape/job-123e4567-e89b-12d3-a456-426614174000
+curl https://fireflare-api.oladapo.workers.dev/scrape/job-123e4567-e89b-12d3-a456-426614174000
 ```
 
 ```json

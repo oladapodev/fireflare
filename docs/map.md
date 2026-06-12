@@ -11,12 +11,12 @@ nav_order: 4
 
 Crawl the link graph within a domain scope and return nodes and edges.
 
-## `POST /v1/map` and `POST /v2/map`
+## `POST /map`
 
 Maps links from a start page with optional depth and domain filters.
 
 ```json
-POST /v2/map
+POST /map
 {
   "url": "https://example.com",
   "includeSubdomains": true,

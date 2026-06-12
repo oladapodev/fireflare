@@ -11,12 +11,12 @@ nav_order: 5
 
 Async breadth-first crawl with status, cancellation, and error reporting.
 
-## `POST /v1/crawl` and `POST /v2/crawl`
+## `POST /crawl`
 
 Starts async crawl and returns job id.
 
 ```json
-POST /v2/crawl
+POST /crawl
 {
   "url": "https://example.com",
   "maxDepth": 2,
@@ -25,12 +25,12 @@ POST /v2/crawl
 }
 ```
 
-## `GET /v1/crawl/{id}` and `GET /v2/crawl/{id}`
+## `GET /crawl/{id}`
 
 Fetch crawl status and partial results.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/crawl/crawl-uuid
+curl https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid
 ```
 
 ```json
@@ -44,34 +44,34 @@ curl https://fireflare-api.oladapo.workers.dev/v2/crawl/crawl-uuid
 }
 ```
 
-## `DELETE /v1/crawl/{id}` and `DELETE /v2/crawl/{id}`
+## `DELETE /crawl/{id}`
 
 Cancels a crawl job in progress.
 
 ```bash
-curl -X DELETE https://fireflare-api.oladapo.workers.dev/v2/crawl/crawl-uuid
+curl -X DELETE https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid
 ```
 
-## `GET /v1/crawl/{id}/errors` and `GET /v2/crawl/{id}/errors`
+## `GET /crawl/{id}/errors`
 
 Returns per-page crawl errors.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/crawl/crawl-uuid/errors
+curl https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid/errors
 ```
 
-## `GET /v1/crawl/ongoing` and `GET /v2/crawl/ongoing`
+## `GET /crawl/ongoing`
 
 Lists crawl jobs currently active by time.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/crawl/ongoing
+curl https://fireflare-api.oladapo.workers.dev/crawl/ongoing
 ```
 
-## `GET /v1/crawl/active` and `GET /v2/crawl/active`
+## `GET /crawl/active`
 
 Lists crawl jobs marked active for the deployment.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/crawl/active
+curl https://fireflare-api.oladapo.workers.dev/crawl/active
 ```

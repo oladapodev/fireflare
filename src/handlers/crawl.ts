@@ -35,7 +35,7 @@ export async function handleCrawl(request: Request, env: Env, ctx: ExecutionCont
     await env.CRAWL_QUEUE.send({ id, type: "crawl", request: crawlRequest });
     await setDurableStatus(env, id, { id, status: "queued", total: 0, completed: 0 });
     await store.markJobRunning(id);
-    return json({ success: true, id, status: "queued", url: `/v1/crawl/${id}` });
+    return json({ success: true, id, status: "queued", url: `/crawl/${id}` });
   }
 
   const result = await runCrawl(id, crawlRequest, env);

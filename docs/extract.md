@@ -11,12 +11,12 @@ nav_order: 2
 
 Parse and structure page content using schema-driven extraction instructions.
 
-## `POST /v1/extract` and `POST /v2/extract`
+## `POST /extract`
 
 Extracts content according to a prompt and optional output schema.
 
 ```json
-POST /v2/extract
+POST /extract
 {
   "url": "https://example.com/docs",
   "prompt": "Extract key headings and section links.",
@@ -37,10 +37,10 @@ POST /v2/extract
 }
 ```
 
-## `GET /v1/extract/{id}` and `GET /v2/extract/{id}`
+## `GET /extract/{id}`
 
 Fetches extracted payload by job id.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/extract/extract-uuid
+curl https://fireflare-api.oladapo.workers.dev/extract/extract-uuid
 ```

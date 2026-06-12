@@ -61,38 +61,23 @@ app.get("/", c =>
     docs: c.env.DOCS_SITE || "https://oladapodev.github.io/fireflare",
     openapi: "/openapi.json",
     endpoints: [
-      "/v1/scrape",
-      "/v1/scrape/:id",
-      "/v1/extract",
-      "/v1/extract/:id",
-      "/v1/search",
-      "/v1/map",
-      "/v1/batch/scrape",
-      "/v1/batch/scrape/:id",
-      "/v1/batch/scrape/:id/errors",
-      "/v1/crawl",
-      "/v1/crawl/:id",
-      "/v1/crawl/:id/errors",
-      "/v1/crawl/:id (DELETE)",
-      "/v1/crawl/ongoing",
-      "/v1/crawl/active",
-      "/v2/scrape",
-      "/v2/scrape/:id",
-      "/v2/extract",
-      "/v2/extract/:id",
-      "/v2/search",
-      "/v2/search/:jobId/feedback",
-      "/v2/map",
-      "/v2/batch/scrape",
-      "/v2/batch/scrape/:id",
-      "/v2/batch/scrape/:id/errors",
-      "/v2/batch/scrape/:id (DELETE)",
-      "/v2/crawl",
-      "/v2/crawl/:id",
-      "/v2/crawl/:id/errors",
-      "/v2/crawl/:id (DELETE)",
-      "/v2/crawl/ongoing",
-      "/v2/crawl/active",
+      "/scrape",
+      "/scrape/:id",
+      "/extract",
+      "/extract/:id",
+      "/search",
+      "/search/:jobId/feedback",
+      "/map",
+      "/batch/scrape",
+      "/batch/scrape/:id",
+      "/batch/scrape/:id/errors",
+      "/batch/scrape/:id (DELETE)",
+      "/crawl",
+      "/crawl/:id",
+      "/crawl/:id/errors",
+      "/crawl/:id (DELETE)",
+      "/crawl/ongoing",
+      "/crawl/active",
     ],
   }),
 );
@@ -100,26 +85,23 @@ app.get("/", c =>
 app.get("/docs", redirectToDocs);
 app.get("/docs/*", redirectToDocs);
 
-for (const version of ["v1", "v2"] as const) {
-  openapi.post(`/${version}/scrape`, ScrapeEndpoint);
-  openapi.get(`/${version}/scrape/:id`, ScrapeStatusEndpoint);
-  openapi.post(`/${version}/extract`, ExtractEndpoint);
-  openapi.get(`/${version}/extract/:id`, ExtractStatusEndpoint);
-  openapi.post(`/${version}/search`, SearchEndpoint);
-  openapi.post(`/${version}/map`, MapEndpoint);
-  openapi.post(`/${version}/crawl`, CrawlEndpoint);
-  openapi.get(`/${version}/crawl/ongoing`, CrawlOngoingEndpoint);
-  openapi.get(`/${version}/crawl/active`, CrawlOngoingEndpoint);
-  openapi.get(`/${version}/crawl/:id/errors`, CrawlErrorsEndpoint);
-  openapi.get(`/${version}/crawl/:id`, CrawlStatusEndpoint);
-  openapi.delete(`/${version}/crawl/:id`, CrawlCancelEndpoint);
-  openapi.post(`/${version}/batch/scrape`, BatchScrapeEndpoint);
-  openapi.get(`/${version}/batch/scrape/:id/errors`, BatchScrapeErrorsEndpoint);
-  openapi.get(`/${version}/batch/scrape/:id`, BatchScrapeStatusEndpoint);
-  openapi.delete(`/${version}/batch/scrape/:id`, BatchScrapeCancelEndpoint);
-}
-
-openapi.post("/v2/search/:jobId/feedback", SearchFeedbackEndpoint);
+openapi.post("/scrape", ScrapeEndpoint);
+openapi.get("/scrape/:id", ScrapeStatusEndpoint);
+openapi.post("/extract", ExtractEndpoint);
+openapi.get("/extract/:id", ExtractStatusEndpoint);
+openapi.post("/search", SearchEndpoint);
+openapi.post("/search/:jobId/feedback", SearchFeedbackEndpoint);
+openapi.post("/map", MapEndpoint);
+openapi.post("/crawl", CrawlEndpoint);
+openapi.get("/crawl/ongoing", CrawlOngoingEndpoint);
+openapi.get("/crawl/active", CrawlOngoingEndpoint);
+openapi.get("/crawl/:id/errors", CrawlErrorsEndpoint);
+openapi.get("/crawl/:id", CrawlStatusEndpoint);
+openapi.delete("/crawl/:id", CrawlCancelEndpoint);
+openapi.post("/batch/scrape", BatchScrapeEndpoint);
+openapi.get("/batch/scrape/:id/errors", BatchScrapeErrorsEndpoint);
+openapi.get("/batch/scrape/:id", BatchScrapeStatusEndpoint);
+openapi.delete("/batch/scrape/:id", BatchScrapeCancelEndpoint);
 
 app.notFound(() => notFound());
 app.onError((error, _c) => {

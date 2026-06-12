@@ -23,4 +23,4 @@ Cloudflare deployment for scraping and crawling.
    - `BRAVE_SEARCH_API_KEY`
    - `AI_GATEWAY_API_TOKEN`
 4. Deploy with `wrangler deploy`.
-5. Hit `/docs/swagger` and run `POST /v2/search` smoke test.
+5. Hit `/docs/swagger` and run `POST /search` smoke test.

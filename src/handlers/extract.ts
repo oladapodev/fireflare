@@ -10,12 +10,11 @@ export async function handleExtract(
   request: Request,
   env: Env,
   ctx: ExecutionContextLike,
-  path: string,
+  _path: string,
 ): Promise<Response> {
   const body = await readJson<Partial<ExtractRequest>>(request);
   const parse = parseExtractInput(body);
   if (!parse.ok) {
-    const deprecation = extractDeprecationMessage(path);
     const firstIssue = parse.issues[0];
     const message = firstIssue?.message ?? "Bad Request";
     return json(
@@ -24,7 +23,6 @@ export async function handleExtract(
         code: "BAD_REQUEST",
         error: message,
         details: parse.issues,
-        ...deprecation,
       },
       { status: 400 },
     );
@@ -41,7 +39,6 @@ export async function handleExtract(
   });
   await store.markJobRunning(id);
 
-  const deprecation = extractDeprecationMessage(path);
   ctx.waitUntil(
     runExtractJob({
       env,
@@ -50,7 +47,6 @@ export async function handleExtract(
       urls,
       invalidURLs,
       scrapeOptions,
-      deprecation,
     }),
   );
 
@@ -59,7 +55,6 @@ export async function handleExtract(
     id,
     ...(invalidURLs.length > 0 ? { invalidURLs } : {}),
     urlTrace: [],
-    ...deprecation,
   });
 }
 
@@ -99,7 +94,6 @@ export async function handleExtractStatus(env: Env, id: string): Promise<Respons
     return json({
       success: status !== "failed" && status !== "cancelled",
       status,
-      ...extractDeprecationMessage("/v2/extract/:jobId"),
       ...(job.error ? { error: job.error } : {}),
     });
   }
@@ -118,9 +112,8 @@ async function runExtractJob(parameters: {
   urls: string[];
   invalidURLs: string[];
   scrapeOptions: ExtractRequest["scrapeOptions"];
-  deprecation: { warnings: string[]; replacement: string };
 }): Promise<void> {
-  const { env, store, id, urls, invalidURLs, scrapeOptions, deprecation } = parameters;
+  const { env, store, id, urls, invalidURLs, scrapeOptions } = parameters;
 
   if (urls.length === 0) {
     await store.saveJobResult(
@@ -131,7 +124,6 @@ async function runExtractJob(parameters: {
         total: 0,
         completed: 0,
         ...(invalidURLs.length > 0 ? { invalidURLs } : {}),
-        ...deprecation,
         urlTrace: [],
         tokensUsed: 0,
         creditsUsed: 0,
@@ -163,16 +155,15 @@ async function runExtractJob(parameters: {
 
   await store.saveJobResult(
     id,
-    {
-      status,
-      data: outputs,
-      total: outputs.length,
-      completed: outputs.length,
-      ...(invalidURLs.length > 0 ? { invalidURLs } : {}),
-      ...deprecation,
-      urlTrace: [],
-      tokensUsed: 0,
-      creditsUsed: Math.max(1, outputs.length),
+      {
+        status,
+        data: outputs,
+        total: outputs.length,
+        completed: outputs.length,
+        ...(invalidURLs.length > 0 ? { invalidURLs } : {}),
+        urlTrace: [],
+        tokensUsed: 0,
+        creditsUsed: Math.max(1, outputs.length),
       expiresAt: getExpiresAt(),
     },
     status === "failed" ? "failed" : "completed",
@@ -346,13 +337,6 @@ function buildExtractPayload(document: ScrapeDocument): Record<string, unknown> 
     url: document.url,
     markdown: document.markdown,
     title: document.title,
-  };
-}
-
-function extractDeprecationMessage(path: string): { warnings: string[]; replacement: string } {
-  return {
-    warnings: [`${path} is deprecated. Use /v2/scrape with formats including a 'json' format object.`],
-    replacement: "/v2/scrape",
   };
 }
 

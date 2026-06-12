@@ -29,7 +29,8 @@ Contract generated from Chanfana classes in `src/openapi-routes.ts`. Schema is s
 }
 ```
 
-Both `v1` and `v2` route groups are supported for all endpoints. `openapi.json` reflects every registered route.
+Single canonical route set (`/scrape`, `/extract`, `/search`, `/map`, `/crawl`, `/batch/scrape`).
+`openapi.json` reflects every registered route.
 
 ## Deployment flow
 

@@ -6,17 +6,15 @@ import { json, readJson } from "../utils/http";
 import { newId } from "../utils/ids";
 
 const MAX_SEARCH_LIMIT = 100;
-const DEFAULT_SEARCH_LIMIT_V1 = 5;
-const DEFAULT_SEARCH_LIMIT_V2 = 10;
+const DEFAULT_SEARCH_LIMIT = 10;
 
 export async function handleSearch(
   request: Request,
   env: Env,
   ctx: ExecutionContextLike,
-  path: string,
 ): Promise<Response> {
   const body = await readJson<Partial<SearchRequest>>(request);
-  const validation = validateSearchBody(body, path);
+  const validation = validateSearchBody(body);
   if (!validation.ok) {
     return json(
       {
@@ -86,17 +84,12 @@ export async function handleSearch(
     position: index + 1,
   }));
 
-  const isV2 = path.startsWith("/v2/");
-  const responseBody = isV2
-    ? {
-        data: {
-          web: positionedResults,
-        },
-        creditsUsed: results.length > 0 ? 2 : 0,
-      }
-    : {
-        data: results,
-      };
+  const responseBody = {
+    data: {
+      web: positionedResults,
+    },
+    creditsUsed: results.length > 0 ? 2 : 0,
+  };
 
   ctx.waitUntil(
     store.saveJobResult(
@@ -118,7 +111,6 @@ export async function handleSearch(
 
 function validateSearchBody(
   body: Partial<SearchRequest>,
-  path: string,
 ): {
   ok: boolean;
   value: {
@@ -141,7 +133,7 @@ function validateSearchBody(
   const query = typeof body.query === "string" ? body.query : "";
 
   const rawLimit = body.limit;
-  const defaultLimit = path.startsWith("/v2/") ? DEFAULT_SEARCH_LIMIT_V2 : DEFAULT_SEARCH_LIMIT_V1;
+  const defaultLimit = DEFAULT_SEARCH_LIMIT;
   let limit = defaultLimit;
 
   if (rawLimit !== undefined) {

@@ -12,23 +12,23 @@ Fireflare is a Cloudflare Workers API for web extraction, mapping, and crawling.
 ## API routes
 
 - `GET /` — health/status payload.
-- `POST /v1/scrape`, `POST /v2/scrape`
-- `GET /v1/scrape/:id`, `GET /v2/scrape/:id`
-- `POST /v1/extract`, `POST /v2/extract`
-- `GET /v1/extract/:id`, `GET /v2/extract/:id`
-- `POST /v1/search`, `POST /v2/search`
-- `POST /v2/search/:id/feedback`
-- `POST /v1/map`, `POST /v2/map`
-- `POST /v1/crawl`, `POST /v2/crawl`
-- `GET /v1/crawl/:id`, `GET /v2/crawl/:id`
-- `DELETE /v1/crawl/:id`, `DELETE /v2/crawl/:id`
-- `GET /v1/crawl/:id/errors`, `GET /v2/crawl/:id/errors`
-- `GET /v1/crawl/ongoing`, `GET /v2/crawl/ongoing`
-- `GET /v1/crawl/active`, `GET /v2/crawl/active`
-- `POST /v1/batch/scrape`, `POST /v2/batch/scrape`
-- `GET /v1/batch/scrape/:id`, `GET /v2/batch/scrape/:id`
-- `GET /v1/batch/scrape/:id/errors`, `GET /v2/batch/scrape/:id/errors`
-- `DELETE /v1/batch/scrape/:id`, `DELETE /v2/batch/scrape/:id`
+- POST /scrape
+- GET /scrape/:id
+- POST /extract
+- GET /extract/:id
+- POST /search
+- `POST /search/:id/feedback`
+- POST /map
+- POST /crawl
+- GET /crawl/:id
+- DELETE /crawl/:id
+- GET /crawl/:id/errors
+- GET /crawl/ongoing
+- GET /crawl/active
+- POST /batch/scrape
+- GET /batch/scrape/:id
+- GET /batch/scrape/:id/errors
+- DELETE /batch/scrape/:id
 
 ## Local docs website
 

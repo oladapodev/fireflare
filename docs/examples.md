@@ -13,7 +13,7 @@ Each snippet uses the public Worker endpoint.
 ## Scrape
 
 ```bash
-curl -X POST https://fireflare-api.oladapo.workers.dev/v2/scrape \
+curl -X POST https://fireflare-api.oladapo.workers.dev/scrape \
   -H "Content-Type: application/json" \
   -d '{
   "url": "https://example.com",
@@ -22,13 +22,13 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/scrape \
 ```
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/scrape/af12...
+curl https://fireflare-api.oladapo.workers.dev/scrape/af12...
 ```
 
 ## Search
 
 ```bash
-curl -X POST https://fireflare-api.oladapo.workers.dev/v2/search \
+curl -X POST https://fireflare-api.oladapo.workers.dev/search \
   -H "Content-Type: application/json" \
   -d '{
     "query": "Cloudflare Workers Browser Rendering",
@@ -39,7 +39,7 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/search \
 ## Map
 
 ```bash
-curl -X POST https://fireflare-api.oladapo.workers.dev/v2/map \
+curl -X POST https://fireflare-api.oladapo.workers.dev/map \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://example.com",
@@ -51,7 +51,7 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/map \
 ## Async Crawl status loop
 
 ```bash
-curl -X POST https://fireflare-api.oladapo.workers.dev/v2/crawl \
+curl -X POST https://fireflare-api.oladapo.workers.dev/crawl \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://example.com",
@@ -62,13 +62,13 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/crawl \
 ```
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/crawl/af12... | jq
+curl https://fireflare-api.oladapo.workers.dev/crawl/af12... | jq
 ```
 
 ## Batch scrape
 
 ```bash
-curl -X POST https://fireflare-api.oladapo.workers.dev/v2/batch/scrape \
+curl -X POST https://fireflare-api.oladapo.workers.dev/batch/scrape \
   -H "Content-Type: application/json" \
   -d '{
     "urls": [
@@ -81,13 +81,13 @@ curl -X POST https://fireflare-api.oladapo.workers.dev/v2/batch/scrape \
 ```
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/batch/scrape/af12...
+curl https://fireflare-api.oladapo.workers.dev/batch/scrape/af12...
 ```
 
 ## Feedback
 
 ```bash
-curl -X POST https://fireflare-api.oladapo.workers.dev/v2/search/search-job-id/feedback \
+curl -X POST https://fireflare-api.oladapo.workers.dev/search/search-job-id/feedback \
   -H "Content-Type: application/json" \
   -d '{"resultIndex": 0, "relevant": true}'
 ```

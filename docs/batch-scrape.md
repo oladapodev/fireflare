@@ -11,12 +11,12 @@ nav_order: 6
 
 Queue multi-URL scrape jobs with concurrency control, progress tracking, and cancellation.
 
-## `POST /v1/batch/scrape` and `POST /v2/batch/scrape`
+## `POST /batch/scrape`
 
 Starts a batch job for many URLs.
 
 ```json
-POST /v2/batch/scrape
+POST /batch/scrape
 {
   "urls": [
     "https://example.com",
@@ -37,26 +37,26 @@ POST /v2/batch/scrape
 }
 ```
 
-## `GET /v1/batch/scrape/{id}` and `GET /v2/batch/scrape/{id}`
+## `GET /batch/scrape/{id}`
 
 Fetch batch progress and completed/failed counters.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/batch/scrape/batch-uuid
+curl https://fireflare-api.oladapo.workers.dev/batch/scrape/batch-uuid
 ```
 
-## `GET /v1/batch/scrape/{id}/errors` and `GET /v2/batch/scrape/{id}/errors`
+## `GET /batch/scrape/{id}/errors`
 
 Returns per-item errors from async batch workers.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/v2/batch/scrape/batch-uuid/errors
+curl https://fireflare-api.oladapo.workers.dev/batch/scrape/batch-uuid/errors
 ```
 
-## `DELETE /v1/batch/scrape/{id}` and `DELETE /v2/batch/scrape/{id}`
+## `DELETE /batch/scrape/{id}`
 
 Cancels remaining tasks for a batch id.
 
 ```bash
-curl -X DELETE https://fireflare-api.oladapo.workers.dev/v2/batch/scrape/batch-uuid
+curl -X DELETE https://fireflare-api.oladapo.workers.dev/batch/scrape/batch-uuid
 ```
