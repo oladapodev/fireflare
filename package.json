@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "chanfana": "^3.3.0",
     "hono": "^4.12.25",
@@ -21,7 +24,9 @@
     "db:migrate:remote": "wrangler d1 migrations apply fireflare --remote",
     "typecheck": "bun node_modules/typescript/bin/tsc --noEmit",
     "build": "bun node_modules/typescript/bin/tsc --noEmit && bun node_modules/wrangler/bin/wrangler.js deploy --dry-run",
-    "ci": "bun run typecheck && bun run docs:build"
+    "sdk:typecheck": "bun run --cwd packages/spindle-client typecheck",
+    "sdk:test": "bun run --cwd packages/spindle-client test",
+    "ci": "bun run typecheck && bun run docs:build && bun run sdk:typecheck && bun run sdk:test"
   },
   "devDependencies": {
     "@types/node": "latest",
