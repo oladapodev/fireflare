@@ -1,22 +1,13 @@
----
-layout: default
-title: API Reference
-nav_order: 3
-has_children: true
----
-
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
 # API Reference
 
 Contract generated from Chanfana classes in `src/openapi-routes.ts`. Schema is source-of-truth:
 
-- <https://fireflare-api.oladapo.workers.dev/openapi.json>
+- <https://spindle-api.oladapo.workers.dev/openapi.json>
 - <http://localhost:8787/openapi.json> when running `wrangler dev`
 
 ## Base URL and headers
 
-- Base URL: `https://fireflare-api.oladapo.workers.dev`
+- Base URL: `https://spindle-api.oladapo.workers.dev`
 - Content-Type: `application/json`
 
 ```json

@@ -1,11 +1,3 @@
----
-layout: default
-title: Auth And Errors
-nav_order: 5
----
-
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
 # Auth And Errors
 
 Production auth and rate limiting are still pending in this repo.
@@ -66,9 +58,13 @@ Current error responses use JSON with:
 
 Current status:
 
-- No API-key enforcement yet.
-- No strict request quotas yet.
-- If you need temporary access gating, add it at your edge or gateway layer before exposing public endpoints.
+- API-key enforcement is enabled for extraction endpoints.
+- Credit metering is tracked for API-key requests.
+- Dashboard signup is open through GitHub OAuth; API usage requires generated keys.
+
+Create a key from the account dashboard:
+
+[Get API key](https://spindle-api.oladapo.workers.dev/request-access)
 
 ## Recommended production controls
 

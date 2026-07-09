@@ -22,6 +22,8 @@ export type AppContext = Context<{ Bindings: Env }>;
 
 const outputFormat = z.enum(["markdown", "html", "rawHtml", "screenshot", "json", "links"]);
 const provider = z.enum(["cloudflare", "kernel", "auto"]);
+const engine = z.enum(["browser", "fetch"]);
+const maxAge = z.number().int().min(0).max(604800);
 const idParam = z.object({ id: z.string().describe("Job ID") });
 const jobIdParam = z.object({ jobId: z.string().describe("Search job ID") });
 const anyJson = z.any();
@@ -34,6 +36,8 @@ const scrapeOptionsSchema = z
     timeout: z.number().int().min(1000).max(300000).optional(),
     browserProvider: provider.optional(),
     jsonPrompt: z.string().optional(),
+    maxAge: maxAge.optional(),
+    engine: engine.optional(),
   })
   .passthrough();
 
@@ -97,6 +101,8 @@ export class ScrapeEndpoint extends OpenAPIRoute {
             timeout: z.number().int().min(1000).max(300000).optional(),
             browserProvider: provider.optional(),
             jsonPrompt: z.string().optional(),
+            maxAge: maxAge.optional(),
+            engine: engine.optional(),
           })
           .passthrough(),
       ),
@@ -185,7 +191,7 @@ export class SearchEndpoint extends OpenAPIRoute {
   };
 
   async handle(c: AppContext): Promise<Response> {
-    return handleSearch(c.req.raw, c.env, c.executionCtx, new URL(c.req.raw.url).pathname);
+    return handleSearch(c.req.raw, c.env, c.executionCtx);
   }
 }
 
@@ -250,6 +256,7 @@ export class CrawlEndpoint extends OpenAPIRoute {
             maxDepth: z.number().int().min(0).max(3).optional(),
             scrapeOptions: scrapeOptionsSchema.optional(),
             async: z.boolean().optional(),
+            concurrency: z.number().int().min(1).max(10).optional(),
           })
           .passthrough(),
       ),

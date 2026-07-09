@@ -1,9 +1,11 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "fireflare-api",
+  "name": "spindle-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-06-11",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
@@ -18,12 +20,20 @@
     "SEARCH_PROVIDER": "auto",
     "KERNEL_API_BASE": "https://api.onkernel.com",
     "BROWSER_SEARCH_URL": "https://search.brave.com/search?q=",
-    "DOCS_SITE": "https://oladapodev.github.io/fireflare"
+    "DOCS_SITE": "https://oladapodev.github.io/fireflare",
+    "BETA_APPROVED_GITHUB_LOGINS": "",
+    "SIGNUP_MODE": "open"
   },
   "browser": {
     "binding": "BROWSER",
     "remote": true
   },
+  "kv_namespaces": [
+    {
+      "binding": "SCRAPE_CACHE",
+      "id": "9289213bf96c4e8bbd14c6110ae5c154"
+    }
+  ],
   "r2_buckets": [
     {
       "binding": "ARTIFACTS",
@@ -67,7 +77,14 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["JobStatusObject"]
+      "new_sqlite_classes": [
+        "JobStatusObject"
+      ]
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "*/15 * * * *"
+    ]
+  }
 }

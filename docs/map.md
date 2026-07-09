@@ -1,12 +1,3 @@
----
-layout: default
-title: Map
-parent: API Reference
-nav_order: 4
----
-
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
 # Map
 
 Crawl the link graph within a domain scope and return nodes and edges.

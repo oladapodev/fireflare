@@ -1,8 +1,11 @@
 {
-  "name": "@fireflare/cloudflare-api",
+  "name": "@spindle/cloudflare-api",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "chanfana": "^3.3.0",
     "hono": "^4.12.25",
@@ -11,17 +14,24 @@
   "scripts": {
     "dev": "wrangler dev",
     "dev:remote-preview": "wrangler dev --remote",
+    "docs:dev": "bun node_modules/vitepress/bin/vitepress.js dev docs",
+    "docs:build": "bun node_modules/vitepress/bin/vitepress.js build docs",
+    "docs:preview": "bun node_modules/vitepress/bin/vitepress.js preview docs",
     "bench:live": "bash scripts/benchmark.sh",
     "deploy": "wrangler deploy --x-autoconfig=false",
     "types": "wrangler types src/worker-configuration.d.ts",
     "db:migrate:local": "wrangler d1 migrations apply fireflare --local",
     "db:migrate:remote": "wrangler d1 migrations apply fireflare --remote",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit && wrangler deploy --dry-run"
+    "typecheck": "bun node_modules/typescript/bin/tsc --noEmit",
+    "build": "bun node_modules/typescript/bin/tsc --noEmit && bun node_modules/wrangler/bin/wrangler.js deploy --dry-run",
+    "sdk:typecheck": "bun run --cwd packages/spindle-client typecheck",
+    "sdk:test": "bun run --cwd packages/spindle-client test",
+    "ci": "bun run typecheck && bun run docs:build && bun run sdk:typecheck && bun run sdk:test"
   },
   "devDependencies": {
     "@types/node": "latest",
     "typescript": "latest",
+    "vitepress": "^1.6.4",
     "wrangler": "latest"
   }
 }

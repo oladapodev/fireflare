@@ -1,29 +1,25 @@
----
-layout: default
-title: Getting Started
-nav_order: 2
----
-
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
 # Getting Started
 
 Base URL:
 
 ```text
-https://fireflare-api.oladapo.workers.dev
+https://spindle-api.oladapo.workers.dev
 ```
+
+Create an account first, then generate an API key from the dashboard:
+
+[Get API key](https://spindle-api.oladapo.workers.dev/request-access)
 
 Health check:
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev
+curl https://spindle-api.oladapo.workers.dev
 ```
 
 Schema:
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/openapi.json
+curl https://spindle-api.oladapo.workers.dev/openapi.json
 ```
 
 The Worker redirects `/docs` to this GitHub Pages site. It does not serve a custom HTML docs app.
@@ -57,6 +53,6 @@ Expected deploy output:
 ## Useful checks
 
 ```bash
-curl -f https://fireflare-api.oladapo.workers.dev/openapi.json
-curl -I https://fireflare-api.oladapo.workers.dev/docs
+curl -f https://spindle-api.oladapo.workers.dev/openapi.json
+curl -I https://spindle-api.oladapo.workers.dev/docs
 ```

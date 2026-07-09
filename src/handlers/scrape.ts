@@ -1,4 +1,5 @@
 import { getBrowserProvider } from "../browser";
+import { getCached, putCached } from "../cache";
 import { Store } from "../store";
 import type { Env, ExecutionContextLike, ScrapeDocument, ScrapeRequest } from "../types";
 import { clampInt, json, readJson, requireString, sameOriginOrAbsoluteUrl } from "../utils/http";
@@ -21,22 +22,30 @@ export async function handleScrape(
     timeout: clampInt(body.timeout, 60000, 1000, 300000),
     browserProvider: body.browserProvider ?? "auto",
     jsonPrompt: body.jsonPrompt,
+    maxAge: clampInt(body.maxAge, 3600, 0, 604800),
+    engine: body.engine === "fetch" ? "fetch" : undefined,
   };
 
   const store = new Store(env);
-  await store.createJob(jobId, "scrape", scrapeRequest);
-  await store.markJobRunning(jobId);
 
-  const provider = getBrowserProvider(env, scrapeRequest);
-  const document = await provider.scrape(scrapeRequest);
+  // Cache check first; D1 bookkeeping moved fully off the hot path so neither a
+  // cache hit nor a fresh scrape blocks the response on remote writes.
+  const cached = await getCached(env, scrapeRequest);
+  const document = cached ?? (await getBrowserProvider(env, scrapeRequest).scrape(scrapeRequest));
   document.metadata.jobId = jobId;
 
   const result = {
     status: "completed",
     data: document,
   } as const;
-  ctx.waitUntil(store.saveDocument(jobId, document));
-  ctx.waitUntil(store.saveJobResult(jobId, result, "completed"));
+  ctx.waitUntil(
+    (async () => {
+      await store.createJob(jobId, "scrape", scrapeRequest);
+      await store.saveDocument(jobId, document);
+      await store.saveJobResult(jobId, result, "completed");
+      if (!cached) await putCached(env, scrapeRequest, document);
+    })(),
+  );
 
   return json({
     success: true,

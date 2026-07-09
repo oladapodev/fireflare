@@ -69,3 +69,8 @@ legacy/
 # Fireflare planning docs and local scripts
 /docus/
 /scripts/
+/docs/.vitepress/dist/
+/docs/.vitepress/cache/
+/packages/*/node_modules/
+/packages/*/node_modules/**
+/packages/*/.vite/

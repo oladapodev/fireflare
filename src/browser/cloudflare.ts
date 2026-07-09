@@ -8,6 +8,10 @@ export class CloudflareBrowserProvider implements BrowserProvider {
   constructor(private readonly env: Env) {}
 
   async scrape(request: ScrapeRequest): Promise<ScrapeDocument> {
+    if (request.engine === "fetch") {
+      return this.scrapeFallback(request);
+    }
+
     const formats = new Set(request.formats ?? ["markdown"]);
     const metadata: ScrapeDocument["metadata"] = {
       provider: this.name,
@@ -19,52 +23,82 @@ export class CloudflareBrowserProvider implements BrowserProvider {
       metadata,
     };
 
+    // When both markdown and HTML are requested, fetch HTML once and derive
+    // markdown locally instead of paying for a second cold browser call.
+    const needsHtml = formats.has("html") || formats.has("rawHtml");
+    const deriveMarkdownFromHtml = formats.has("markdown") && needsHtml;
+
     try {
-      if (formats.has("markdown")) {
-        const result = await normalizeQuickActionResult(
-          await this.env.BROWSER.quickAction("markdown", {
-            url: request.url,
-            waitForTimeout: request.waitFor,
-          }),
+      const tasks: Promise<void>[] = [];
+
+      if (needsHtml || deriveMarkdownFromHtml) {
+        tasks.push(
+          (async () => {
+            const result = await normalizeQuickActionResult(
+              await this.env.BROWSER.quickAction("content", {
+                url: request.url,
+                waitForTimeout: request.waitFor,
+              }),
+            );
+            const html = stringFromUnknown(result, ["html", "content", "text", "result"]);
+            if (formats.has("rawHtml")) document.rawHtml = html;
+            if (formats.has("html")) document.html = html;
+            if (deriveMarkdownFromHtml) document.markdown = htmlToText(html ?? "");
+          })(),
         );
-        document.markdown = stringFromUnknown(result, ["markdown", "content", "text", "result"]);
       }
 
-      if (formats.has("html") || formats.has("rawHtml")) {
-        const result = await normalizeQuickActionResult(
-          await this.env.BROWSER.quickAction("content", {
-            url: request.url,
-            waitForTimeout: request.waitFor,
-          }),
+      if (formats.has("markdown") && !deriveMarkdownFromHtml) {
+        tasks.push(
+          (async () => {
+            const result = await normalizeQuickActionResult(
+              await this.env.BROWSER.quickAction("markdown", {
+                url: request.url,
+                waitForTimeout: request.waitFor,
+              }),
+            );
+            document.markdown = stringFromUnknown(result, ["markdown", "content", "text", "result"]);
+          })(),
         );
-        const html = stringFromUnknown(result, ["html", "content", "text", "result"]);
-        if (formats.has("rawHtml")) document.rawHtml = html;
-        else document.html = html;
       }
 
       if (formats.has("links")) {
-        document.links = await this.links(request.url, 250);
+        tasks.push(
+          (async () => {
+            document.links = await this.links(request.url, 250);
+          })(),
+        );
       }
 
       if (formats.has("json")) {
-        const result = await normalizeQuickActionResult(
-          await this.env.BROWSER.quickAction("json", {
-            url: request.url,
-            prompt: request.jsonPrompt ?? "Extract the main page content as structured JSON.",
-          }),
+        tasks.push(
+          (async () => {
+            const result = await normalizeQuickActionResult(
+              await this.env.BROWSER.quickAction("json", {
+                url: request.url,
+                prompt: request.jsonPrompt ?? "Extract the main page content as structured JSON.",
+              }),
+            );
+            document.json = result as ScrapeDocument["json"];
+          })(),
         );
-        document.json = result as ScrapeDocument["json"];
       }
 
       if (formats.has("screenshot")) {
-        const result = await normalizeQuickActionResult(
-          await this.env.BROWSER.quickAction("screenshot", {
-            url: request.url,
-            screenshotOptions: { type: "png", fullPage: true },
-          }),
+        tasks.push(
+          (async () => {
+            const result = await normalizeQuickActionResult(
+              await this.env.BROWSER.quickAction("screenshot", {
+                url: request.url,
+                screenshotOptions: { type: "png", fullPage: true },
+              }),
+            );
+            document.screenshot = stringFromUnknown(result, ["screenshot", "data", "result"]);
+          })(),
         );
-        document.screenshot = stringFromUnknown(result, ["screenshot", "data", "result"]);
       }
+
+      await Promise.all(tasks);
     } catch (error) {
       if (!isQuickActionUnavailable(error)) {
         throw error;
