@@ -1,5 +1,5 @@
 {
-  "name": "@fireflare/cloudflare-api",
+  "name": "@spindle/cloudflare-api",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,17 +11,22 @@
   "scripts": {
     "dev": "wrangler dev",
     "dev:remote-preview": "wrangler dev --remote",
+    "docs:dev": "bun node_modules/vitepress/bin/vitepress.js dev docs",
+    "docs:build": "bun node_modules/vitepress/bin/vitepress.js build docs",
+    "docs:preview": "bun node_modules/vitepress/bin/vitepress.js preview docs",
     "bench:live": "bash scripts/benchmark.sh",
     "deploy": "wrangler deploy --x-autoconfig=false",
     "types": "wrangler types src/worker-configuration.d.ts",
     "db:migrate:local": "wrangler d1 migrations apply fireflare --local",
     "db:migrate:remote": "wrangler d1 migrations apply fireflare --remote",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit && wrangler deploy --dry-run"
+    "typecheck": "bun node_modules/typescript/bin/tsc --noEmit",
+    "build": "bun node_modules/typescript/bin/tsc --noEmit && bun node_modules/wrangler/bin/wrangler.js deploy --dry-run",
+    "ci": "bun run typecheck && bun run docs:build"
   },
   "devDependencies": {
     "@types/node": "latest",
     "typescript": "latest",
+    "vitepress": "^1.6.4",
     "wrangler": "latest"
   }
 }

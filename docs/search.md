@@ -1,12 +1,3 @@
----
-layout: default
-title: Search
-parent: API Reference
-nav_order: 3
----
-
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
 # Search
 
 Query web providers and collect ranked results. Optionally scrape result pages into structured formats.
@@ -102,7 +93,7 @@ Submits quality feedback for ranked results.
 
 ```bash
 curl -X POST \
-  https://fireflare-api.oladapo.workers.dev/search/search-uuid/feedback \
+  https://spindle-api.oladapo.workers.dev/search/search-uuid/feedback \
   -H "Content-Type: application/json" \
   -d '{"resultIndex": 0, "relevant": true}'
 ```

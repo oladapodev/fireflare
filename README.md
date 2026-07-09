@@ -1,6 +1,6 @@
 # API Service (Cloudflare Worker)
 
-This repository root contains the standalone Cloudflare deployment for Fireflare.
+This repository root contains the standalone Cloudflare deployment for Spindle.
 
 ## Runtime
 
@@ -78,9 +78,22 @@ wrangler secret put AI_GATEWAY_API_TOKEN --config wrangler.jsonc
 
 - `GET /docs` — redirects to the GitHub Pages documentation site
 - `GET /openapi.json` — Chanfana-generated OpenAPI schema
-- `docs/` folder — GitHub Pages documentation source
+- `docs/` folder — VitePress documentation source
 
-## Open tasks
+```bash
+PATH=/home/dev/.bun/bin:$PATH bun install
+PATH=/home/dev/.bun/bin:$PATH bun run docs:dev
+PATH=/home/dev/.bun/bin:$PATH bun run docs:build
+```
 
-- Add auth and rate-limit docs for production.
-- Add request/response examples for every route.
+The docs nav includes a **Get API Key** entry that sends users to the account signup/dashboard flow.
+
+## CI
+
+GitHub Actions runs:
+
+```bash
+bun install --frozen-lockfile
+bun run typecheck
+bun run docs:build
+```

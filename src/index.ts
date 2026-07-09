@@ -1,10 +1,6 @@
-import { JobStatusObject } from "./durable/job-status";
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
-import { explorerHTML } from "./ui";
-import {
-  consumeCrawlQueue,
-} from "./handlers/crawl";
+import { JobStatusObject } from "./durable/job-status";
 import {
   BatchScrapeCancelEndpoint,
   BatchScrapeEndpoint,
@@ -18,18 +14,36 @@ import {
   ExtractEndpoint,
   ExtractStatusEndpoint,
   MapEndpoint,
-  redirectToDocs,
   ScrapeEndpoint,
   ScrapeStatusEndpoint,
   SearchEndpoint,
   SearchFeedbackEndpoint,
+  redirectToDocs,
 } from "./openapi-routes";
-import type { CrawlQueueMessage, Env } from "./types";
+import { consumeCrawlQueue } from "./handlers/crawl";
 import { HttpError, json, notFound } from "./utils/http";
-
-export { JobStatusObject };
+import type { CloudflareQueueMessage, Env } from "./types";
+import { productRoutes } from "./product/routes";
+import { apiAuthAndMetering } from "./product/metering";
+import { runDueMonitors } from "./product/monitors";
 
 const app = new Hono<{ Bindings: Env }>();
+
+app.route("/", productRoutes);
+app.get("/docs", redirectToDocs);
+app.get("/docs/*", redirectToDocs);
+
+for (const path of [
+  "/scrape", "/scrape/*",
+  "/extract", "/extract/*",
+  "/search", "/search/*",
+  "/map",
+  "/crawl", "/crawl/*",
+  "/batch/scrape", "/batch/scrape/*",
+]) {
+  app.use(path, apiAuthAndMetering);
+}
+
 const openapi = fromHono(app, {
   docs_url: null,
   redoc_url: null,
@@ -38,31 +52,20 @@ const openapi = fromHono(app, {
   raiseUnknownParameters: false,
   schema: {
     info: {
-      title: "Fireflare API",
-      version: "1.0.0",
-      description: "Cloudflare-native web extraction API. Search web, scrape content, map links, and run crawl jobs.",
+      title: "Spindle API",
+      version: "0.1.0",
+      description: "Cloudflare-native web extraction API. Search web, scrape content, map links, extract structured data, and run crawl jobs.",
     },
     tags: [
       { name: "Scrape", description: "Single-page extraction endpoints" },
       { name: "Extract", description: "Structured extraction jobs" },
-      { name: "Search", description: "Web search and search feedback" },
-      { name: "Map", description: "Site link discovery" },
+      { name: "Search", description: "Search and search feedback endpoints" },
+      { name: "Map", description: "Link discovery endpoints" },
       { name: "Crawl", description: "Crawl jobs and crawl status" },
       { name: "Batch", description: "Batch scrape jobs" },
     ],
   },
 });
-
-app.get("/", c => {
-  const origin = new URL(c.req.raw.url).origin;
-  const docsUrl = c.env.DOCS_SITE || "https://oladapodev.github.io/fireflare";
-  return new Response(explorerHTML(origin, docsUrl), {
-    headers: { "Content-Type": "text/html; charset=utf-8" },
-  });
-});
-
-app.get("/docs", redirectToDocs);
-app.get("/docs/*", redirectToDocs);
 
 openapi.post("/scrape", ScrapeEndpoint);
 openapi.get("/scrape/:id", ScrapeStatusEndpoint);
@@ -82,28 +85,23 @@ openapi.get("/batch/scrape/:id/errors", BatchScrapeErrorsEndpoint);
 openapi.get("/batch/scrape/:id", BatchScrapeStatusEndpoint);
 openapi.delete("/batch/scrape/:id", BatchScrapeCancelEndpoint);
 
-app.notFound(() => notFound());
-app.onError((error, _c) => {
+app.notFound(notFound);
+app.onError((error) => {
   if (error instanceof HttpError) {
     return json({ success: false, code: error.code, error: error.message }, { status: error.status });
   }
   console.error(error);
-  return json(
-    {
-      success: false,
-      code: "UNKNOWN_ERROR",
-      error: error instanceof Error ? error.message : String(error),
-    },
-    { status: 500 },
-  );
+  return json({ success: false, code: "INTERNAL_ERROR", error: "Internal server error" }, { status: 500 });
 });
 
-export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    return app.fetch(request, env, ctx);
-  },
+export { JobStatusObject };
 
-  async queue(batch: MessageBatch<CrawlQueueMessage>, env: Env): Promise<void> {
+export default {
+  fetch: app.fetch,
+  async queue(batch: MessageBatch<CloudflareQueueMessage>, env: Env): Promise<void> {
     await consumeCrawlQueue(batch, env);
+  },
+  async scheduled(_event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
+    await runDueMonitors(env);
   },
 };

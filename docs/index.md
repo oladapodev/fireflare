@@ -1,18 +1,16 @@
----
-layout: default
-title: Overview
-nav_order: 1
----
+# Spindle
 
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
-# Fireflare
-
-Fireflare is a Cloudflare Workers API for scraping, extraction, search, mapping, and crawl workflows.
+Spindle is a Cloudflare Workers API for scraping, extraction, search, mapping, and crawl workflows.
 
 The API contract is generated from Worker route classes with [Chanfana](https://chanfana.pages.dev/introduction) and exposed at:
 
-[OpenAPI schema](https://fireflare-api.oladapo.workers.dev/openapi.json)
+[OpenAPI schema](https://spindle-api.oladapo.workers.dev/openapi.json)
+
+::: tip Get started
+Create an account and generate your first API key from the dashboard:
+
+[Get API key](https://spindle-api.oladapo.workers.dev/request-access)
+:::
 
 ## Product surface
 
@@ -28,7 +26,7 @@ The API contract is generated from Worker route classes with [Chanfana](https://
 
 ## Runtime
 
-Fireflare runs as `fireflare-api` on Cloudflare Workers with Browser Rendering, D1, R2, Queues, and Durable Objects.
+Spindle runs as `fireflare-api` on Cloudflare Workers with Browser Rendering, D1, R2, Queues, and Durable Objects.
 
 ## How docs are organized
 
@@ -41,7 +39,7 @@ Fireflare runs as `fireflare-api` on Cloudflare Workers with Browser Rendering, 
 <details markdown="1">
   <summary>Current public deployment</summary>
 
-- API root: <https://fireflare-api.oladapo.workers.dev>
-- OpenAPI document: <https://fireflare-api.oladapo.workers.dev/openapi.json>
+- API root: <https://spindle-api.oladapo.workers.dev>
+- OpenAPI document: <https://spindle-api.oladapo.workers.dev/openapi.json>
 - Docs redirect: `<worker>/docs` -> `https://oladapodev.github.io/fireflare`
 </details>

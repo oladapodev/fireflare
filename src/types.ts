@@ -20,7 +20,12 @@ export interface Env {
   KERNEL_API_KEY?: string;
   KERNEL_API_BASE?: string;
   DOCS_SITE?: string;
+  GITHUB_CLIENT_ID?: string;
+  GITHUB_CLIENT_SECRET?: string;
+  BETA_APPROVED_GITHUB_LOGINS?: string;
+  SIGNUP_MODE?: "open" | "closed";
   BROWSER: BrowserRunBinding;
+  SCRAPE_CACHE: KVNamespace;
   ARTIFACTS: R2Bucket;
   DB: D1Database;
   CRAWL_QUEUE: Queue<CloudflareQueueMessage>;
@@ -41,6 +46,8 @@ export interface ScrapeRequest {
   timeout?: number;
   browserProvider?: "cloudflare" | "kernel" | "auto";
   jsonPrompt?: string;
+  maxAge?: number;
+  engine?: "browser" | "fetch";
 }
 
 export interface ScrapeDocument {
@@ -106,6 +113,7 @@ export interface CrawlRequest {
   maxDepth?: number;
   scrapeOptions?: Omit<ScrapeRequest, "url">;
   async?: boolean;
+  concurrency?: number;
 }
 
 export interface CrawlQueueMessage {

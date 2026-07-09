@@ -1,4 +1,4 @@
-import type { BrowserProvider } from "./types";
+import type { BrowserProvider, ScrapeManyResult } from "./types";
 import type { Env, ScrapeDocument, ScrapeRequest } from "../types";
 import { HttpError } from "../utils/http";
 
@@ -30,30 +30,79 @@ export class KernelBrowserProvider implements BrowserProvider {
 
     const browser = await this.createBrowser(request.url);
     try {
-      const formats = request.formats ?? ["markdown"];
-      const execution = await this.execute(browser.session_id, buildScrapeScript(request.url, formats, request.waitFor), request.timeout);
-      if (!execution.success) {
-        throw new HttpError(502, execution.error ?? "Kernel Playwright execution failed", "KERNEL_EXECUTION_FAILED");
-      }
-      const result = execution.result as Partial<ScrapeDocument>;
-      return {
-        url: result.url ?? request.url,
-        title: result.title,
-        markdown: result.markdown,
-        html: result.html,
-        rawHtml: result.rawHtml,
-        screenshot: result.screenshot,
-        links: result.links,
-        metadata: {
-          provider: this.name,
-          liveViewUrl: browser.browser_live_view_url ?? null,
-          stdout: execution.stdout ?? null,
-          stderr: execution.stderr ?? null,
-        },
-      };
+      return await this.runOnSession(browser, request);
     } finally {
       await this.deleteBrowser(browser.session_id).catch(() => undefined);
     }
+  }
+
+  /**
+   * Scrape many URLs reusing a small pool of Kernel sessions. Each worker holds
+   * one browser session and navigates it across multiple URLs, so we pay the
+   * (already tiny) spin-up cost once per session instead of once per URL.
+   */
+  async scrapeMany(
+    urls: string[],
+    options: Omit<ScrapeRequest, "url">,
+    concurrency: number,
+    onResult?: (item: ScrapeManyResult) => Promise<void> | void,
+  ): Promise<ScrapeManyResult[]> {
+    if (!this.env.KERNEL_API_KEY) {
+      throw new HttpError(500, "KERNEL_API_KEY is required for Kernel browser provider", "KERNEL_NOT_CONFIGURED");
+    }
+    const results = new Array<ScrapeManyResult>(urls.length);
+    const poolSize = Math.max(1, Math.min(concurrency, urls.length));
+    let next = 0;
+
+    const worker = async (): Promise<void> => {
+      let browser: KernelBrowser | null = null;
+      try {
+        while (true) {
+          const index = next++;
+          if (index >= urls.length) return;
+          const url = urls[index]!;
+          let item: ScrapeManyResult;
+          try {
+            if (!browser) browser = await this.createBrowser(url);
+            const document = await this.runOnSession(browser, { ...options, url });
+            item = { url, index, document };
+          } catch (error) {
+            item = { url, index, error: error instanceof Error ? error.message : String(error) };
+          }
+          results[index] = item;
+          if (onResult) await onResult(item);
+        }
+      } finally {
+        if (browser) await this.deleteBrowser(browser.session_id).catch(() => undefined);
+      }
+    };
+
+    await Promise.all(Array.from({ length: poolSize }, () => worker()));
+    return results;
+  }
+
+  private async runOnSession(browser: KernelBrowser, request: ScrapeRequest): Promise<ScrapeDocument> {
+    const formats = request.formats ?? ["markdown"];
+    const execution = await this.execute(browser.session_id, buildScrapeScript(request.url, formats, request.waitFor), request.timeout);
+    if (!execution.success) {
+      throw new HttpError(502, execution.error ?? "Kernel Playwright execution failed", "KERNEL_EXECUTION_FAILED");
+    }
+    const result = execution.result as Partial<ScrapeDocument>;
+    return {
+      url: result.url ?? request.url,
+      title: result.title,
+      markdown: result.markdown,
+      html: result.html,
+      rawHtml: result.rawHtml,
+      screenshot: result.screenshot,
+      links: result.links,
+      metadata: {
+        provider: this.name,
+        liveViewUrl: browser.browser_live_view_url ?? null,
+        stdout: execution.stdout ?? null,
+        stderr: execution.stderr ?? null,
+      },
+    };
   }
 
   async links(url: string, limit: number): Promise<string[]> {

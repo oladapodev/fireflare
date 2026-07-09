@@ -1,6 +1,6 @@
-# Fireflare Documentation
+# Spindle Documentation
 
-Fireflare is a Cloudflare Workers API for web extraction, mapping, and crawling.
+Spindle is a Cloudflare Workers API for web extraction, mapping, and crawling.
 
 ## What this project is
 
@@ -42,14 +42,14 @@ This repository ships public documentation through GitHub Pages:
 
 - `README.md` — runtime and quickstart
 - `docus/` — legacy planning notes (ignored in git)
-- `docs/` — now used for maintainable public documentation
-- `docs/assets/css/fireflare-docs.css` — Cloudflare orange light/dark visual system
+- `docs/` — VitePress public documentation
+- `docs/.vitepress/` — VitePress config, navigation, and theme styles
 
 ## Docs notes
 
-- API docs now present full endpoint coverage using folded sections in [api-reference.md](/home/dev/Desktop/fireflare/docs/api-reference.md).
+- API docs now present full endpoint coverage using folded sections in [api-reference.md](./api-reference.md).
 - Code blocks share a tuned syntax palette for both light and dark mode.
-- `/docs` on the worker redirects to GitHub Pages.
+- `/docs` on the worker redirects to the VitePress site on GitHub Pages.
 
 ## Runtime setup
 

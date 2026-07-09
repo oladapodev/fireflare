@@ -1,12 +1,3 @@
----
-layout: default
-title: Crawl
-parent: API Reference
-nav_order: 5
----
-
-<link rel="stylesheet" href="{{ '/assets/css/fireflare-docs.css' | relative_url }}">
-
 # Crawl
 
 Async breadth-first crawl with status, cancellation, and error reporting.
@@ -30,7 +21,7 @@ POST /crawl
 Fetch crawl status and partial results.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid
+curl https://spindle-api.oladapo.workers.dev/crawl/crawl-uuid
 ```
 
 ```json
@@ -49,7 +40,7 @@ curl https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid
 Cancels a crawl job in progress.
 
 ```bash
-curl -X DELETE https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid
+curl -X DELETE https://spindle-api.oladapo.workers.dev/crawl/crawl-uuid
 ```
 
 ## `GET /crawl/{id}/errors`
@@ -57,7 +48,7 @@ curl -X DELETE https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid
 Returns per-page crawl errors.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid/errors
+curl https://spindle-api.oladapo.workers.dev/crawl/crawl-uuid/errors
 ```
 
 ## `GET /crawl/ongoing`
@@ -65,7 +56,7 @@ curl https://fireflare-api.oladapo.workers.dev/crawl/crawl-uuid/errors
 Lists crawl jobs currently active by time.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/crawl/ongoing
+curl https://spindle-api.oladapo.workers.dev/crawl/ongoing
 ```
 
 ## `GET /crawl/active`
@@ -73,5 +64,5 @@ curl https://fireflare-api.oladapo.workers.dev/crawl/ongoing
 Lists crawl jobs marked active for the deployment.
 
 ```bash
-curl https://fireflare-api.oladapo.workers.dev/crawl/active
+curl https://spindle-api.oladapo.workers.dev/crawl/active
 ```
